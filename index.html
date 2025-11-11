@@ -14,9 +14,7 @@
       color: #004b8d;
       letter-spacing: 0.5px;
     }
-    .input-area {
-      margin-bottom: 25px;
-    }
+    .input-area { margin-bottom: 25px; }
     input {
       font-size: 16px;
       padding: 6px 8px;
@@ -32,9 +30,8 @@
       border-radius: 3px;
       cursor: pointer;
     }
-    button:hover {
-      background-color: #0064c8;
-    }
+    button:hover { background-color: #0064c8; }
+
     .label-preview {
       display: none;
       background: #fff;
@@ -50,85 +47,11 @@
       margin-bottom: 10px;
       padding-bottom: 5px;
     }
-    .label-header strong {
-      display: block;
-      font-size: 18px;
+    .label-header img {
+      width: 120px;
+      height: auto;
+      margin-bottom: 4px;
+      display: inline-block;
     }
     .print-btn {
       margin-top: 15px;
-      background-color: #007b2f;
-    }
-    .print-btn:hover {
-      background-color: #00993b;
-    }
-  </style>
-</head>
-<body>
-
-  <h1>American Highway Label Generator</h1>
-
-  <div class="input-area">
-    <label for="heatId">Enter 10-digit Heat ID:</label><br>
-    <input type="text" id="heatId" maxlength="10" placeholder="e.g. 1234567890">
-    <button onclick="generateLabel()">Generate</button>
-  </div>
-
-  <div id="labelPreview" class="label-preview">
-    <div class="label-header">
-      <strong>AMERICAN HIGHWAY</strong>
-
-      
-      Heat Identification Label
-    </div>
-    <div id="labelData"></div>
-    <button class="print-btn" onclick="window.print()">Print Label</button>
-  </div>
-
-  <script>
-    async function generateLabel() {
-      const heatId = document.getElementById('heatId').value.trim();
-      const preview = document.getElementById('labelPreview');
-      const labelData = document.getElementById('labelData');
-
-      if (heatId.length !== 10 || !/^\d+$/.test(heatId)) {
-        alert('Please enter a valid 10-digit Heat ID.');
-        return;
-      }
-
-      try {
-        const res = await fetch('heat_db.txt');
-        const text = await res.text();
-
-        const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-        let record = null;
-
-        for (const line of lines) {
-          const [id, item, operator, lot, qty] = line.split(',');
-          if (id === heatId) {
-            record = { id, item, operator, lot, qty };
-            break;
-          }
-        }
-
-        if (record) {
-          labelData.innerHTML = `
-            <strong>Heat ID:</strong> ${record.id}<br>
-            <strong>Item Number:</strong> ${record.item}<br>
-            <strong>Operator Number:</strong> ${record.operator}<br>
-            <strong>Lot Number:</strong> ${record.lot}<br>
-            <strong>Quantity:</strong> ${record.qty}
-          `;
-        } else {
-          labelData.innerHTML = `<span style="color:red;">No record found for Heat ID ${heatId}</span>`;
-        }
-
-        preview.style.display = 'block';
-      } catch (err) {
-        alert('Error loading data file. Please check that heat_db.txt is in the same folder.');
-        console.error(err);
-      }
-    }
-  </script>
-
-</body>
-</html>
